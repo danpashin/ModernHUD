@@ -7,19 +7,23 @@
 
 import UIKit
 
+@objc(MHModernHud)
 open class ModernHUD: UIView {
     /// Определяет стиль индикатора
     ///
     /// - .spinner показывает спиннер и текст (если есть)
     /// - .textOnly показывает только текст
-    public enum Style {
-        case arc, arcRotate, textOnly
+    @objc(MHModernHudStyle)
+    public enum Style: Int {
+        case arc = 0
+        case arcRotate = 1
+        case textOnly = 2
     }
 
     /// Устанавливает прогресс спиннера
     ///
     /// По умолчанию, установлен на 0.75.
-    open var progress: CGFloat {
+    @objc open var progress: CGFloat {
         get {
             progressView.progress
         }
@@ -29,7 +33,7 @@ open class ModernHUD: UIView {
     }
 
     /// Устанавливает стиль индикатора.
-    open var style: Style = .arcRotate {
+    @objc open var style: Style = .arcRotate {
         didSet {
             updateProgressView()
         }
@@ -38,7 +42,7 @@ open class ModernHUD: UIView {
     /// Устанавливает основной текст в индикатор.
     ///
     /// Для скрытия должен быть установлен в nil.
-    open var text: String? {
+    @objc open var text: String? {
         didSet {
             setText(text, for: textLabel)
         }
@@ -47,7 +51,7 @@ open class ModernHUD: UIView {
     /// Устанавливает дополнительный текст в индикатор.
     ///
     /// Для скрытия должен быть установлен в nil.
-    open var detailedText: String? {
+    @objc open var detailedText: String? {
         didSet {
             setText(detailedText, for: detailedTextLabel)
         }
@@ -56,13 +60,13 @@ open class ModernHUD: UIView {
     /// Стиль заднего размытия
     ///
     /// По умолчанию, UIBlurEffectStyleSystemThickMaterial
-    open var blurStyle: UIBlurEffect.Style = .systemThickMaterial {
+    @objc open var blurStyle: UIBlurEffect.Style = .systemThickMaterial {
         didSet {
             blurView.effect = UIBlurEffect(style: blurStyle)
         }
     }
 
-    open var cornerRadius: CGFloat = 24.0 {
+    @objc open var cornerRadius: CGFloat = 24.0 {
         didSet {
             blurView.layer.cornerRadius = cornerRadius
         }
@@ -153,6 +157,7 @@ open class ModernHUD: UIView {
     /// Выполняет показ индикатора на видимом окне UIWindow.
     ///
     /// - Returns: Возвращает экземпляр индикатора для дальнейшей настройки.
+    @objc
     public static func show() -> Self? {
         guard
             let scene = UIWindow.focusedScene,
@@ -203,6 +208,7 @@ open class ModernHUD: UIView {
     /// - Parameters:
     ///   - view: Представление, на котором необходимо показать индикатор.
     ///   - animated: Если флаг установлен в YES, выполняется с анимацией. В противном случае - без.
+    @objc
     open func show(on view: UIView, animated: Bool = true) {
         if animated {
             alpha = 0.0
@@ -218,6 +224,7 @@ open class ModernHUD: UIView {
 
     /// Выполняет скрытие индикатора.
     /// - Parameter animated: Если флаг установлен в YES, выполняется с анимацией. В противном случае - без.
+    @objc
     open func hide(_ animated: Bool = true) {
         if animated {
             UIView.animate(withDuration: 0.5) { [self] in
@@ -234,6 +241,7 @@ open class ModernHUD: UIView {
 
     /// Выполняет анимированное скрытие индикатора с задержкой.
     /// - Parameter delay: Время перед скрытием индикатора.
+    @objc
     open func hide(delay: CGFloat, animated: Bool = true) {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [self] in
             hide(animated)
@@ -244,6 +252,7 @@ open class ModernHUD: UIView {
     /// - Parameters:
     ///   - progress: Значение прогресса от 0 до 1
     ///   - animated: Если задан YES, то прогресс будет установлен с анимацией. В противном случае - без.
+    @objc
     open func setProgress(_ progress: CGFloat, animated: Bool) {
         progressView.setProgress(progress, animated: animated)
     }
