@@ -8,7 +8,8 @@
 import UIKit
 
 extension UIWindow {
-    static var focusedScene: UIWindowScene? {
+    @objc(mh_focusedScene)
+    public static var focusedScene: UIWindowScene? {
         UIApplication.shared.connectedScenes.first { scene in
             let state = scene.activationState
             return (state == .foregroundActive || state == .foregroundInactive) && scene is UIWindowScene
