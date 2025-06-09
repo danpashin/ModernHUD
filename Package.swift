@@ -5,15 +5,11 @@ import PackageDescription
 
 let package = Package(
     name: "ModernHUD",
-    platforms: [.iOS(.v13)],
+    platforms: [.iOS(.v13), .macCatalyst(.v13)],
     products: [
-        .library(
-            name: "ModernHUD",
-            targets: ["ModernHUD"]),
+        .library(name: "ModernHUD", targets: ["ModernHUD"]),
     ],
     targets: [
-        .target(
-            name: "ModernHUD"),
-
+        .target(name: "ModernHUD"),
     ]
 )

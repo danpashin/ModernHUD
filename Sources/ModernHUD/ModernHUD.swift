@@ -9,6 +9,10 @@ import UIKit
 
 @objc(MHModernHud)
 open class ModernHUD: UIView {
+    public enum ShowError: Error {
+        case noSceneFound
+    }
+
     /// Определяет стиль индикатора
     ///
     /// - .spinner показывает спиннер и текст (если есть)
@@ -158,11 +162,11 @@ open class ModernHUD: UIView {
     ///
     /// - Returns: Возвращает экземпляр индикатора для дальнейшей настройки.
     @objc
-    public static func show() -> Self? {
+    public static func show() throws -> Self {
         guard
             let scene = UIWindow.focusedScene,
-            let keyWindow = scene.windows.first(where: { $0.isKeyWindow })
-        else { return nil }
+            let keyWindow = scene.windows.first(where: \.isKeyWindow)
+        else { throw ShowError.noSceneFound }
 
         let hud = Self()
         hud.show(on: keyWindow, animated: true)
@@ -194,8 +198,16 @@ open class ModernHUD: UIView {
             translatesAutoresizingMaskIntoConstraints = false
 
             NSLayoutConstraint.activate([
+                // View must be centered
                 centerXAnchor.constraint(equalTo: superview.centerXAnchor),
-                centerYAnchor.constraint(equalTo: superview.centerYAnchor)
+                centerYAnchor.constraint(equalTo: superview.centerYAnchor),
+
+                // With 1:1 or more relationship with small text or without it
+                widthAnchor.constraint(greaterThanOrEqualTo: heightAnchor),
+
+                // But not exceed 90% of the screen
+                widthAnchor.constraint(lessThanOrEqualTo: superview.widthAnchor, multiplier: 0.9),
+                heightAnchor.constraint(lessThanOrEqualTo: superview.heightAnchor, multiplier: 0.9),
             ])
 
             updateProgressView()
